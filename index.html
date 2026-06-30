@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Géolocalisation des Daaras — Commune de Wakhinane Nimzatt</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0F6E56;
+    --green-mid: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-pale: #F0FAF6;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --blue: #378ADD;
+    --blue-light: #E6F1FB;
+    --pink: #ED93B1;
+    --pink-light: #FBEAF0;
+    --gray-900: #1a1a1a;
+    --gray-700: #444;
+    --gray-500: #777;
+    --gray-300: #ccc;
+    --gray-100: #f5f5f3;
+    --white: #ffffff;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f2f4f3;
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--green-dark);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+  }
+  .header-logo { display: flex; align-items: center; gap: 12px; }
+  .logo-circle {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-circle svg { width: 22px; height: 22px; }
+  .header-title { color: var(--green-light); font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .header-sub { color: #5DCAA5; font-size: 12px; margin-top: 1px; }
+  .header-date {
+    background: #085041;
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    text-align: right;
+  }
+  .header-date .dl { font-size: 10px; color: #5DCAA5; }
+  .header-date .dv { font-size: 13px; font-weight: 600; color: var(--green-light); }
+  .nav {
+    background: #085041;
+    display: flex;
+    padding: 0 32px;
+    gap: 2px;
+  }
+  .nav a {
+    padding: 10px 16px;
+    font-size: 12px;
+    color: #5DCAA5;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .nav a.active, .nav a:hover {
+    color: var(--green-light);
+    border-bottom-color: var(--green-mid);
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 24px 32px 48px; }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--green-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-300);
+    margin-left: 8px;
+  }
+
+  /* ── KPI CARDS ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid var(--green-mid);
+    transition: transform 0.15s;
+  }
+  .kpi:hover { transform: translateY(-2px); }
+  .kpi-icon { font-size: 22px; color: var(--green-mid); margin-bottom: 10px; }
+  .kpi-label { font-size: 12px; color: var(--gray-500); margin-bottom: 4px; }
+  .kpi-value { font-size: 28px; font-weight: 600; color: var(--gray-900); line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--gray-500); margin-top: 5px; }
+  .kpi-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 8px;
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 500;
+  }
+
+  /* ── CHARTS ROW ── */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-title svg { color: var(--green-mid); }
+
+  /* Bar chart */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-name { font-size: 11px; color: var(--gray-500); width: 150px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-wrap { flex: 1; height: 7px; background: var(--gray-100); border-radius: 4px; }
+  .bar-fill { height: 7px; border-radius: 4px; background: var(--green-mid); transition: width 0.6s ease; }
+  .bar-val { font-size: 11px; font-weight: 600; color: var(--gray-700); min-width: 16px; text-align: right; }
+
+  /* Decade chart */
+  .decade-bars { display: flex; align-items: flex-end; gap: 8px; height: 110px; margin-bottom: 6px; }
+  .d-col { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+  .d-bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--green-mid); }
+  .d-label { font-size: 9px; color: var(--gray-500); text-align: center; }
+  .d-val { font-size: 10px; font-weight: 600; color: var(--gray-700); }
+
+  /* Donut */
+  .donut-wrap { display: flex; align-items: center; gap: 16px; }
+  .legend-list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .leg-row { display: flex; align-items: center; justify-content: space-between; }
+  .leg-left { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--gray-700); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .leg-pct { font-size: 12px; font-weight: 600; color: var(--gray-900); }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    box-shadow: var(--shadow);
+  }
+  .search-bar input {
+    flex: 1;
+    min-width: 200px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 12px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    color: var(--gray-900);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-bar input:focus { border-color: var(--green-mid); }
+  .search-bar select {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 10px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    color: var(--gray-700);
+    background: var(--white);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .search-bar select:focus { border-color: var(--green-mid); }
+  .result-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--gray-500);
+    font-weight: 500;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+  thead { background: var(--green-pale); }
+  th {
+    padding: 11px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    color: var(--green-dark);
+    border-bottom: 1px solid #d4ede5;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  th:hover { background: #d4ede5; }
+  td {
+    padding: 9px 12px;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-100);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--green-pale); }
+  .col-nom { width: 26%; }
+  .col-qrt { width: 17%; }
+  .col-ori { width: 13%; }
+  .col-reg { width: 10%; }
+  .col-eff { width: 9%; }
+  .col-gar { width: 8%; }
+  .col-fil { width: 8%; }
+  .col-rec { width: 9%; }
+  td.num { text-align: right; font-weight: 500; }
+
+  /* Pills */
+  .pill {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .pill-trad { background: var(--green-light); color: var(--green-dark); }
+  .pill-pluri { background: var(--amber-light); color: #854F0B; }
+  .pill-int { background: var(--blue-light); color: #0C447C; }
+  .pill-ext { background: var(--gray-100); color: var(--gray-700); }
+  .pill-oui { background: #EAF3DE; color: #3B6D11; }
+  .pill-non { background: #FCEBEB; color: #A32D2D; }
+
+  /* ── MAP ── */
+  .map-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+  }
+  .map-header {
+    background: var(--green-dark);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .map-header-left { display: flex; align-items: center; gap: 8px; color: var(--green-light); font-size: 13px; font-weight: 600; }
+  .map-header-right { display: flex; gap: 8px; align-items: center; }
+  .map-badge { background: #085041; color: #5DCAA5; font-size: 11px; padding: 3px 10px; border-radius: 12px; }
+  .map-frame { width: 100%; height: 500px; border: none; display: block; }
+  .map-footer {
+    padding: 10px 20px;
+    background: var(--green-pale);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #d4ede5;
+  }
+  .map-footer span { font-size: 11px; color: var(--gray-500); }
+  .map-footer a { font-size: 11px; color: var(--green-mid); text-decoration: none; font-weight: 500; }
+  .map-footer a:hover { text-decoration: underline; }
+
+  /* ── ANALYSES SPATIALES ── */
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .analysis-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+    border-left: 3px solid var(--green-mid);
+  }
+  .analysis-card .a-icon { font-size: 20px; margin-bottom: 8px; }
+  .analysis-card .a-title { font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+  .analysis-card .a-desc { font-size: 11px; color: var(--gray-500); line-height: 1.4; }
+  .analysis-card.c-routes { border-left-color: var(--amber); }
+  .analysis-card.c-habitat { border-left-color: var(--blue); }
+  .analysis-card.c-energie { border-left-color: var(--pink); }
+  .analysis-note {
+    background: var(--green-pale);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--gray-700);
+    margin-bottom: 16px;
+    border: 1px solid #d4ede5;
+  }
+  .analysis-note b { color: var(--green-dark); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--green-dark);
+    color: #5DCAA5;
+    text-align: center;
+    padding: 18px 32px;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  .footer span { color: var(--green-light); font-weight: 500; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .page { padding: 16px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    .analysis-grid { grid-template-columns: repeat(2, 1fr); }
+    .header-top { padding: 12px 16px; }
+    .nav { padding: 0 16px; }
+  }
+  @media (max-width: 600px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+    .analysis-grid { grid-template-columns: 1fr; }
+  }
+.header .header-top .header-logo .logo-circle #imageField {
+	height: 100px;
+	width: 100px;
+	margin-right: 10px;
+	margin-left: 10px;
+}
+</style>
+</head>
+<body>
+
+<h2>
+  <!-- HEADER -->
+</h2>
+<header class="header">
+  <div class="header-top">
+    <div class="header-logo">
+      <div class="logo-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21s-8-5-8-11a8 8 0 0 1 16 0c0 6-8 11-8 11z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <form name="form1" method="post" action="">
+          <label></label>
+          <label>
+          <input type="image" name="imageField" id="imageField" src="image/logo.jfif">
+          </label>
+        </form>
+      </div>
+      <div>
+        <div class="header-title">
+          <h2><marquee>
+           Bienvenue sur la plateforme de Géolocalisation des Daaras de la commune de Wakhinane Nimzatt</h2>
+          </marquee>
+        </div>
+        <div class="header-sub"></div>
+      </div>
+    </div>
+    <div class="header-date">
+      <div class="dl">Dernière mise à jour</div>
+      <div class="dv">Juin 2026</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#accueil" class="active">&#9632; Accueil</a>
+    <a href="#statistiques">&#9632; Statistiques</a>
+    <a href="#liste">&#9632; Liste des daaras</a>
+    <a href="#carte">&#9632; Carte localisation des daaras</a>
+    <a href="#analyses">&#9632; Analyses spatiales</a>
+  </nav>
+</header>
+
+<div class="page">
+
+  <!-- SECTION : INDICATEURS -->
+  <div id="accueil" style="padding-top: 8px;">
+    <h2 class="section-title">Indicateurs clés</h2>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-icon">&#127970;</div>
+        <div class="kpi-label">Total daaras recensés</div>
+        <div class="kpi-value">63</div>
+        <div class="kpi-sub">Commune de Wakhinane Nimzatt</div>
+        <span class="kpi-tag">&#128205; géolocalisés</span>
+      </div>
+      <div class="kpi">
+        <div class="kpi-icon">&#128101;</div>
+        <div class="kpi-label">Total apprenants</div>
+        <div class="kpi-value">5 537</div>
+        <div class="kpi-sub">3 423 garçons · 2 114 filles</div>
+        <span class="kpi-tag">effectif global</span>
+      </div>
+      <div class="kpi">
+        <div class="kpi-icon">&#128218;</div>
+        <div class="kpi-label">Orientations</div>
+        <div class="kpi-value">36 / 27</div>
+        <div class="kpi-sub">Traditionnels / Pluridisciplinaires</div>
+        <span class="kpi-tag">tous privés</span>
+      </div>
+      <div class="kpi">
+        <div class="kpi-icon">&#127968;</div>
+        <div class="kpi-label">Régime d'hébergement</div>
+        <div class="kpi-value">15 / 48</div>
+        <div class="kpi-sub">Internat / Externat</div>
+        <span class="kpi-tag">9 dirigés par des femmes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION : GRAPHIQUES -->
+  <div id="statistiques">
+    <h2 class="section-title">Statistiques</h2>
+    <div class="charts-grid">
+
+      <!-- Quartiers -->
+      <!-- Orientation -->
+<div class="card">
+        <div class="card-title">&#127919; Orientation pédagogique</div>
+        <div class="donut-wrap" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+          <svg width="110" height="110" viewBox="0 0 110 110" style="display:block; margin: 0 auto;">
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#E1F5EE" stroke-width="18"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#1D9E75" stroke-width="18"
+              stroke-dasharray="143 108" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#EF9F27" stroke-width="18"
+              stroke-dasharray="108 143" stroke-dashoffset="-143" transform="rotate(-90 55 55)"/>
+            <text x="55" y="58" text-anchor="middle" font-size="14" font-weight="600" fill="#1D9E75" font-family="DM Sans">63</text>
+          </svg>
+          <div class="legend-list" style="width:100%;">
+            <div class="leg-row"><span class="leg-left"><span class="leg-dot" style="background:#1D9E75;"></span>Traditionnel</span><span class="leg-pct">57% · 36</span></div>
+            <div class="leg-row"><span class="leg-left"><span class="leg-dot" style="background:#EF9F27;"></span>Pluridisciplinaire</span><span class="leg-pct">43% · 27</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Garçons/Filles -->
+      <div class="card">
+        <div class="card-title">&#9898; Garçons / Filles</div>
+        <div class="donut-wrap" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+          <svg width="110" height="110" viewBox="0 0 110 110" style="display:block; margin: 0 auto;">
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#E6F1FB" stroke-width="18"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#378ADD" stroke-width="18"
+              stroke-dasharray="152 99" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="#ED93B1" stroke-width="18"
+              stroke-dasharray="99 152" stroke-dashoffset="-152" transform="rotate(-90 55 55)"/>
+            <text x="55" y="58" text-anchor="middle" font-size="11" font-weight="600" fill="#378ADD" font-family="DM Sans">5 537</text>
+          </svg>
+          <div class="legend-list" style="width:100%;">
+            <div class="leg-row"><span class="leg-left"><span class="leg-dot" style="background:#378ADD;"></span>Garçons</span><span class="leg-pct">62% · 3 423</span></div>
+            <div class="leg-row"><span class="leg-left"><span class="leg-dot" style="background:#ED93B1;"></span>Filles</span><span class="leg-pct">38% · 2 114</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Décennies (pleine largeur) -->
+  </div>
+  <!-- SECTION : TABLEAU -->
+  <div id="liste">
+    <h2 class="section-title">Liste des daaras</h2>
+
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="&#128269; Rechercher par nom ou quartier...">
+      <select id="filtOri">
+        <option value="">Toutes orientations</option>
+        <option value="traditionnel">Traditionnel</option>
+        <option value="pluridisciplinaire">Pluridisciplinaire</option>
+      </select>
+      <select id="filtReg">
+        <option value="">Tous régimes</option>
+        <option value="internat">Internat</option>
+        <option value="externat">Externat</option>
+      </select>
+      <select id="filtRec">
+        <option value="">Toutes (reconnaissance)</option>
+        <option value="oui">Reconnue</option>
+        <option value="non">Non reconnue</option>
+      </select>
+      <span class="result-count" id="count">63 daaras</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-nom" onClick="sort('Nom')">Nom &#8597;</th>
+            <th class="col-qrt" onClick="sort('Quartier')">Quartier &#8597;</th>
+            <th class="col-ori" onClick="sort('Orientation')">Orientation &#8597;</th>
+            <th class="col-reg" onClick="sort('Regime')">Régime &#8597;</th>
+            <th class="col-eff" onClick="sort('Effectif')" style="text-align:right;">Effectif &#8597;</th>
+            <th class="col-gar" onClick="sort('Garcons')" style="text-align:right;">Garçons &#8597;</th>
+            <th class="col-fil" onClick="sort('Filles')" style="text-align:right;">Filles &#8597;</th>
+            <th class="col-rec" onClick="sort('Reconnue')">Reconnue &#8597;</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION : CARTE -->
+  <div id="carte">
+    <h2 class="section-title">Carte interactive</h2>
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#128205; Carte de géolocalisation des daaras — Wakhinane Nimzatt
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">&#9679; 63 daaras</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/carte-de-localisation-des-daaras-dans-la-comuune-d_1410570?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : Enquête de terrain · Commune de Wakhinane Nimzatt · Dakar, Sénégal</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/carte-de-localisation-des-daaras-dans-la-comuune-d_1410570" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION : ANALYSES SPATIALES -->
+  <div id="analyses">
+    <h2 class="section-title">Analyses spatiales</h2>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <div class="a-icon">&#128293;</div>
+        <div class="a-title">Densité des daaras</div>
+        <div class="a-desc">Concentration des daaras par quartier (daara/km²)</div>
+      </div>
+      <div class="analysis-card c-routes">
+        <div class="a-icon">&#128739;</div>
+        <div class="a-title">Accessibilité aux routes</div>
+        <div class="a-desc">Zones tampons par paliers de distance au réseau routier</div>
+      </div>
+      <div class="analysis-card c-habitat">
+        <div class="a-icon">&#127968;</div>
+        <div class="a-title">Accessibilité à l'habitation</div>
+        <div class="a-desc">Bâtis classés selon leur distance aux daaras</div>
+      </div>
+      <div class="analysis-card c-energie">
+        <div class="a-icon">&#128167;</div>
+        <div class="a-title">Eau &amp; électricité</div>
+        <div class="a-desc">Source d'approvisionnement en eau et en électricité de chaque daara</div>
+      </div>
+    </div>
+
+    <div class="analysis-note">
+      &#128161; Chaque analyse est présentée sur une carte dédiée ci-dessous, pour une lecture claire sans superposition. Cliquez sur &#8599; <b>« Ouvrir en plein écran »</b> sous chaque carte pour l'explorer en détail.
+    </div>
+
+    <!-- Densité des daaras -->
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#128293; Densité des daaras par quartier
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">daara/km²</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/carte-de-la-densite-de-repartition-des-daaras_1424643?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : ANAT / Données terrain · SCR : WGS84 UTM Zone 28N · Auteur : Fatou Bintou DIEYE</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/carte-de-la-densite-de-repartition-des-daaras_1424643" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+
+    <!-- Accessibilité aux routes -->
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#128739; Accessibilité des daaras par rapport aux routes
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">3 paliers de distance</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/accessibilite-des-daaras-par-rapport-aux-routes_1424644?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : ANAT / Données terrain · SCR : WGS84 UTM Zone 28N · Auteur : Fatou Bintou DIEYE</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/accessibilite-des-daaras-par-rapport-aux-routes_1424644" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+
+    <!-- Accessibilité aux habitations -->
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#127968; Accessibilité des daaras par rapport aux habitations
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">bâtis classés</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/carte-daccessibilite-des-daaras-par-rapport-aux-ha_1424647?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : ANAT / Données terrain · SCR : WGS84 UTM Zone 28N · Auteur : Fatou Bintou DIEYE</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/carte-daccessibilite-des-daaras-par-rapport-aux-ha_1424647" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+
+    <!-- Approvisionnement en eau -->
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#128167; Approvisionnement en eau des daaras
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">3 sources d'eau</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/carte-dapprovisionnement-en-eau-des-daaras_1424642?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : ANAT / Données terrain · SCR : WGS84 UTM Zone 28N · Auteur : Fatou Bintou DIEYE</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/carte-dapprovisionnement-en-eau-des-daaras_1424642" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+
+    <!-- Approvisionnement en électricité -->
+    <div class="map-card">
+      <div class="map-header">
+        <div class="map-header-left">
+          &#9889; Approvisionnement en électricité des daaras
+        </div>
+        <div class="map-header-right">
+          <span class="map-badge">2 sources d'énergie</span>
+          <span class="map-badge">uMap · OpenStreetMap</span>
+        </div>
+      </div>
+      <iframe
+        class="map-frame"
+        src="https://umap.openstreetmap.fr/fr/map/carte-dapprovisionnement-en-electricite-des-daaras_1424641?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&allowEdit=false&moreControl=false&searchControl=false&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=none&captionBar=false"
+        allowfullscreen>
+      </iframe>
+      <div class="map-footer">
+        <span>&#8505; Source : ANAT / Données terrain · SCR : WGS84 UTM Zone 28N · Auteur : Fatou Bintou DIEYE</span>
+        <a href="https://umap.openstreetmap.fr/fr/map/carte-dapprovisionnement-en-electricite-des-daaras_1424641" target="_blank">&#8599; Ouvrir en plein écran</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fin .page -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <h2><span> Géolocalisation des daaras de la Commune de Wakhinane Nimzatt · Dakar, Sénégal · 2026 . réalisée par Fatou Bintou DIEYE</span> 
+  </h2>
+</footer>
+
+<h2>&nbsp;</h2>
+<script>
+const data = [
+  {Nom:"DAARA ABOU BAKR AS-SIDDIQ",Quartier:"Thione Samb",Orientation:"traditionnel",Regime:"externat",Effectif:100,Garcons:60,Filles:40,Reconnue:"non"},
+  {Nom:"CHABABOU ZAMANE",Quartier:"Cité Madieng Khary Dieng",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:106,Garcons:60,Filles:46,Reconnue:"non"},
+  {Nom:"AL MOUDIAHIDINA",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"externat",Effectif:185,Garcons:105,Filles:80,Reconnue:"non"},
+  {Nom:"NOUDIOUMOUL HOUDA",Quartier:"Cité Abdou Diouf",Orientation:"traditionnel",Regime:"externat",Effectif:67,Garcons:37,Filles:30,Reconnue:"non"},
+  {Nom:"NOUDIOUMOUL HOUDA",Quartier:"Wakhinane Nimzatt",Orientation:"traditionnel",Regime:"externat",Effectif:50,Garcons:30,Filles:20,Reconnue:"non"},
+  {Nom:"IHYAHOU SOUNATOU",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"internat",Effectif:30,Garcons:23,Filles:7,Reconnue:"oui"},
+  {Nom:"IMAM MALICK AL MADANIYI",Quartier:"Cité Air Afrique",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:374,Garcons:374,Filles:0,Reconnue:"oui"},
+  {Nom:"SEYDA AÏCHA",Quartier:"Ndiobene Cité Viviane",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:46,Garcons:26,Filles:20,Reconnue:"non"},
+  {Nom:"DAARA ABDOURAHMANE BALDÉ",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"internat",Effectif:20,Garcons:20,Filles:0,Reconnue:"non"},
+  {Nom:"FIRDAWSI",Quartier:"Cité Santé",Orientation:"traditionnel",Regime:"externat",Effectif:75,Garcons:50,Filles:25,Reconnue:"non"},
+  {Nom:"MARKASOU CHEICH IBN BAZ",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"externat",Effectif:105,Garcons:57,Filles:48,Reconnue:"non"},
+  {Nom:"DAROU RAKHMANE",Quartier:"Daroukhane 2",Orientation:"traditionnel",Regime:"externat",Effectif:55,Garcons:30,Filles:25,Reconnue:"non"},
+  {Nom:"OUMAHANI NIANG",Quartier:"Cité Sofraco",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:65,Garcons:35,Filles:30,Reconnue:"oui"},
+  {Nom:"NOUROUL HOUDA",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"internat",Effectif:43,Garcons:40,Filles:3,Reconnue:"non"},
+  {Nom:"NOUROU ALWAR",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"externat",Effectif:186,Garcons:86,Filles:100,Reconnue:"non"},
+  {Nom:"DAARA ABDOU AZIZ",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"internat",Effectif:35,Garcons:28,Filles:7,Reconnue:"non"},
+  {Nom:"DAARA IMAM SALIF SALL",Quartier:"Darou Rahmane 4",Orientation:"traditionnel",Regime:"externat",Effectif:38,Garcons:20,Filles:18,Reconnue:"non"},
+  {Nom:"FATHOU RAHMANE",Quartier:"Cité Trésor",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:60,Garcons:34,Filles:26,Reconnue:"oui"},
+  {Nom:"AS-SADIQ",Quartier:"Cité Sofraco",Orientation:"traditionnel",Regime:"externat",Effectif:50,Garcons:30,Filles:20,Reconnue:"non"},
+  {Nom:"DAARA ELHADJI ABDOUL AZIZ SY DABAKH",Quartier:"Cité Sofraco",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:59,Garcons:38,Filles:21,Reconnue:"non"},
+  {Nom:"DAARA ELHADJI MOR TALLA NDIAYE LAMBAYE",Quartier:"Cité Cours Suprême",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:21,Garcons:15,Filles:6,Reconnue:"non"},
+  {Nom:"INSTITUT IMAM HASSANE",Quartier:"Cité Air Afrique",Orientation:"traditionnel",Regime:"externat",Effectif:50,Garcons:15,Filles:35,Reconnue:"oui"},
+  {Nom:"IMAM MALICK AL MADANIYI",Quartier:"Cité Air Afrique",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:200,Garcons:110,Filles:90,Reconnue:"oui"},
+  {Nom:"IMAM MALICK AL MADANIYI",Quartier:"Cité Air Afrique",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:85,Garcons:74,Filles:11,Reconnue:"oui"},
+  {Nom:"DAARA ABOUBACARY SADIKH",Quartier:"Cité SDE",Orientation:"traditionnel",Regime:"externat",Effectif:35,Garcons:12,Filles:23,Reconnue:"non"},
+  {Nom:"MADRASSATOUL IMANE",Quartier:"Touba Guédiawaye",Orientation:"traditionnel",Regime:"externat",Effectif:57,Garcons:25,Filles:32,Reconnue:"non"},
+  {Nom:"DAAR",Quartier:"Kip Koko",Orientation:"traditionnel",Regime:"internat",Effectif:25,Garcons:20,Filles:5,Reconnue:"non"},
+  {Nom:"DAARA GALAY KA",Quartier:"Daroukhane 1",Orientation:"traditionnel",Regime:"externat",Effectif:155,Garcons:106,Filles:49,Reconnue:"non"},
+  {Nom:"NOUROUL HOUDA",Quartier:"Cité Abdou Diouf",Orientation:"traditionnel",Regime:"externat",Effectif:102,Garcons:43,Filles:59,Reconnue:"non"},
+  {Nom:"FAWZOUL MOUBINE",Quartier:"Daroukhane 2",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:11,Garcons:9,Filles:2,Reconnue:"non"},
+  {Nom:"DAARA CHEIKH TIDIANE",Quartier:"Daroukhane 2",Orientation:"traditionnel",Regime:"internat",Effectif:40,Garcons:33,Filles:7,Reconnue:"non"},
+  {Nom:"NOUROUL HOUDA ELHADJI IBRAHIMA NIASS",Quartier:"Tivaouane",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:61,Garcons:36,Filles:25,Reconnue:"non"},
+  {Nom:"DAARA IMAM GALLAY KA",Quartier:"Kip Koko",Orientation:"traditionnel",Regime:"externat",Effectif:150,Garcons:80,Filles:70,Reconnue:"non"},
+  {Nom:"INSTITUTION CIRA",Quartier:"Cité SDE",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:289,Garcons:128,Filles:161,Reconnue:"oui"},
+  {Nom:"NOUROUL HOUDA CHEIKH IBRAHIMA NIASS",Quartier:"Tivaouane",Orientation:"traditionnel",Regime:"externat",Effectif:74,Garcons:48,Filles:26,Reconnue:"non"},
+  {Nom:"DAARA SERIGNE MODOU FALL",Quartier:"Kawsara",Orientation:"traditionnel",Regime:"externat",Effectif:106,Garcons:59,Filles:47,Reconnue:"non"},
+  {Nom:"ÉCOLE CHEIKH IBRAHIMA SARR",Quartier:"Wakhinane Nimzatt",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:123,Garcons:67,Filles:56,Reconnue:"non"},
+  {Nom:"DARA DAROU KHOUDOSS",Quartier:"Darou Khoudoss",Orientation:"traditionnel",Regime:"externat",Effectif:135,Garcons:75,Filles:60,Reconnue:"non"},
+  {Nom:"DAARA MAME BABA NDAO",Quartier:"Baye Laye",Orientation:"traditionnel",Regime:"internat",Effectif:36,Garcons:36,Filles:0,Reconnue:"non"},
+  {Nom:"FA DAAROU SALAM",Quartier:"Cité Sores",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:100,Garcons:65,Filles:35,Reconnue:"non"},
+  {Nom:"DAARA MOUMAD FADAL",Quartier:"Cité Trésor",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:60,Garcons:45,Filles:15,Reconnue:"oui"},
+  {Nom:"ROIDOUL HILMY",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:57,Garcons:31,Filles:26,Reconnue:"non"},
+  {Nom:"NADMIL HOUDA",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:40,Garcons:25,Filles:15,Reconnue:"non"},
+  {Nom:"DAARA IMAM MOUSSA DIA",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:40,Garcons:36,Filles:4,Reconnue:"non"},
+  {Nom:"BABOU SALAM",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:28,Garcons:21,Filles:7,Reconnue:"non"},
+  {Nom:"TAZA WOUDOU SIKHAR",Quartier:"Ndiobene Cité Viviane",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:67,Garcons:38,Filles:29,Reconnue:"non"},
+  {Nom:"ÉCOLE CHEIKH IBRAHIMA SARR",Quartier:"Cité Trésor",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:204,Garcons:109,Filles:95,Reconnue:"oui"},
+  {Nom:"BUERUL KHAÏR",Quartier:"Cité Trésor",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:110,Garcons:61,Filles:49,Reconnue:"oui"},
+  {Nom:"DAARA SERIGNE YOUSSOUFA NDIAYE",Quartier:"Cité Trésor",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:40,Garcons:25,Filles:15,Reconnue:"—"},
+  {Nom:"NAYLOUL MOURAT",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:166,Garcons:88,Filles:78,Reconnue:"non"},
+  {Nom:"NOUROUL HOUDA",Quartier:"Ndiobene Cité Viviane",Orientation:"traditionnel",Regime:"externat",Effectif:25,Garcons:25,Filles:0,Reconnue:"non"},
+  {Nom:"FIRDAWSI",Quartier:"Cité Santé",Orientation:"traditionnel",Regime:"externat",Effectif:70,Garcons:64,Filles:6,Reconnue:"non"},
+  {Nom:"ROUWADOUL HILMY",Quartier:"Cité Municipalité",Orientation:"traditionnel",Regime:"internat",Effectif:107,Garcons:98,Filles:9,Reconnue:"non"},
+  {Nom:"DAARUL IKHSANE",Quartier:"Wakhinane Nimzatt",Orientation:"pluridisciplinaire",Regime:"internat",Effectif:136,Garcons:80,Filles:56,Reconnue:"non"},
+  {Nom:"DAARA IMAME ALIOUNE",Quartier:"Kip Koko",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:70,Garcons:50,Filles:20,Reconnue:"non"},
+  {Nom:"DAARA ELHADJI IBRAHIMA NDIAYE",Quartier:"Wakhinane",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:68,Garcons:30,Filles:38,Reconnue:"non"},
+  {Nom:"AL HASSANAYNI",Quartier:"Daroukhane 1",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:82,Garcons:43,Filles:39,Reconnue:"non"},
+  {Nom:"INSTITUT AL AZAR",Quartier:"Baye Laye",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:78,Garcons:34,Filles:44,Reconnue:"oui"},
+  {Nom:"DAARA SERIGNE SALIOU MBACKÉ",Quartier:"Baye Laye",Orientation:"traditionnel",Regime:"externat",Effectif:140,Garcons:80,Filles:60,Reconnue:"non"},
+  {Nom:"MAFATIHOUL BISHRI",Quartier:"Baye Laye",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:110,Garcons:70,Filles:40,Reconnue:"non"},
+  {Nom:"HAMDOU WA SOUKOUR",Quartier:"Daroukhane 2",Orientation:"traditionnel",Regime:"externat",Effectif:14,Garcons:8,Filles:6,Reconnue:"non"},
+  {Nom:"NASSEROU DINE",Quartier:"Daroukhane 2",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:181,Garcons:83,Filles:98,Reconnue:"oui"},
+  {Nom:"DAARA KHL IBN WALID",Quartier:"Wakhinane Nimzatt",Orientation:"pluridisciplinaire",Regime:"externat",Effectif:40,Garcons:40,Filles:30,Reconnue:"non"}
+];
+
+let filtered = [...data];
+let sortKey = '';
+let sortAsc = true;
+
+function render() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  filtered.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="col-nom" title="'+d.Nom+'">'+d.Nom+'</td>' +
+      '<td class="col-qrt" title="'+d.Quartier+'">'+d.Quartier+'</td>' +
+      '<td class="col-ori"><span class="pill '+(d.Orientation==='traditionnel'?'pill-trad':'pill-pluri')+'">'+(d.Orientation==='traditionnel'?'Traditionnel':'Pluridisc.')+'</span></td>' +
+      '<td class="col-reg"><span class="pill '+(d.Regime==='internat'?'pill-int':'pill-ext')+'">'+d.Regime+'</span></td>' +
+      '<td class="col-eff num">'+d.Effectif+'</td>' +
+      '<td class="col-gar num">'+d.Garcons+'</td>' +
+      '<td class="col-fil num">'+d.Filles+'</td>' +
+      '<td class="col-rec"><span class="pill '+(d.Reconnue==='oui'?'pill-oui':'pill-non')+'">'+d.Reconnue+'</span></td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('count').textContent = filtered.length + ' daara' + (filtered.length > 1 ? 's' : '');
+}
+
+function applyFilters() {
+  const s = document.getElementById('search').value.toLowerCase();
+  const o = document.getElementById('filtOri').value;
+  const r = document.getElementById('filtReg').value;
+  const rec = document.getElementById('filtRec').value;
+  filtered = data.filter(d =>
+    (!s || d.Nom.toLowerCase().includes(s) || d.Quartier.toLowerCase().includes(s)) &&
+    (!o || d.Orientation === o) &&
+    (!r || d.Regime === r) &&
+    (!rec || d.Reconnue === rec)
+  );
+  if (sortKey) applySort(); else render();
+}
+
+function sort(key) {
+  if (sortKey === key) sortAsc = !sortAsc; else { sortKey = key; sortAsc = true; }
+  applySort();
+}
+
+function applySort() {
+  filtered.sort((a, b) => {
+    const av = a[sortKey], bv = b[sortKey];
+    if (typeof av === 'number') return sortAsc ? av - bv : bv - av;
+    return sortAsc ? String(av).localeCompare(String(bv), 'fr') : String(bv).localeCompare(String(av), 'fr');
+  });
+  render();
+}
+
+document.getElementById('search').addEventListener('input', applyFilters);
+document.getElementById('filtOri').addEventListener('change', applyFilters);
+document.getElementById('filtReg').addEventListener('change', applyFilters);
+document.getElementById('filtRec').addEventListener('change', applyFilters);
+
+render();
+</script>
+</body>
+</html>
